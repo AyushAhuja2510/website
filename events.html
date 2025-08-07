@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Looping Cover Flow Carousel</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #000;
+      height: 100%;
+    }
+    body {
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    .carousel-container {
+      width: 90vw;
+      margin: 0 auto;
+      overflow-x: scroll;
+      scroll-snap-type: x mandatory;
+      padding: 40px 0;
+      background: #000;
+      white-space: nowrap;
+      box-sizing: border-box;
+    }
+    .carousel {
+      display: flex;
+      gap: 2em;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .carousel li {
+      scroll-snap-align: center;
+      flex: 0 0 300px;
+      aspect-ratio: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      perspective: 1000px;
+    }
+    .carousel img {
+      width: 100%;
+      height: auto;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+      transition: transform 0.4s, box-shadow 0.4s, opacity 0.4s;
+      -webkit-box-reflect: below 0.5em
+        linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.5));
+      background: #222;
+      border-radius: 16px;
+    }
+    /* Center (active) image */
+    .carousel li.active img {
+      transform: scale(1.2) rotateY(0deg);
+      box-shadow: 0 30px 50px rgba(0,0,0,0.6);
+      opacity: 1;
+    }
+    /* Left images */
+    .carousel li:not(.active):has(~ .active) img {
+      transform: scale(0.8) rotateY(35deg);
+      opacity: 0.7;
+    }
+    /* Right images */
+    .carousel li.active ~ li img {
+      transform: scale(0.8) rotateY(-35deg);
+      opacity: 0.7;
+    }
+    /* Hide scrollbar for Chrome, Safari, Opera */
+    .carousel-container::-webkit-scrollbar {
+      display: none;
+    }
+    /* Hide scrollbar for IE, Edge, Firefox */
+    .carousel-container {
+      -ms-overflow-style: none; /* IE and Edge */
+      scrollbar-width: none;    /* Firefox */
+    }
+  </style>
+</head>
+<body>
+<div class="carousel-container">
+  <ul class="carousel">
+    <li><img src="C:\Users\AYUSH AHUJA\AppData\Local\Temp\24aac695-1d33-4526-bf11-bd87c0f7baa3_ccet_acm_events[1].zip.aa3\ccet_acm_events\images\1 (1).jpg" alt="Cover 1" /></li>
+    <li><img src="C:\Users\AYUSH AHUJA\AppData\Local\Temp\f2df65c9-bf4e-438f-80ac-63403f3f016b_ccet_acm_events[1].zip.16b\ccet_acm_events\images\1 (1).png" alt="Cover 2" /></li>
+    <li><img src="C:\Users\AYUSH AHUJA\AppData\Local\Temp\7fb68414-fad7-4891-8c4e-9a108892ffb6_ccet_acm_events[1].zip.fb6\ccet_acm_events\images\1 (3).png" alt="Cover 3" /></li>
+    <li><img src="C:\Users\AYUSH AHUJA\AppData\Local\Temp\984aee8f-3e68-4915-b86a-5e364c45fd59_ccet_acm_events[1].zip.d59\ccet_acm_events\images\1 (5).jpg" alt="Cover 4" /></li>
+    <li><img src="C:\Users\AYUSH AHUJA\AppData\Local\Temp\c64c588c-6f7f-4b93-b1cf-3c60ff430492_ccet_acm_events[1].zip.492\ccet_acm_events\images\1 (6).png" alt="Cover 5" /></li>
+    <li><img src="C:\Users\AYUSH AHUJA\AppData\Local\Temp\544b805d-c172-4076-aa9f-8efcc949389a_ccet_acm_events[1].zip.89a\ccet_acm_events\images\1 (7).jpg" alt="Cover 6" /></li>
+    <li><img src="C:\Users\AYUSH AHUJA\AppData\Local\Temp\4ab3e411-46cb-4df5-a98f-a977539b942f_ccet_acm_events[1].zip.42f\ccet_acm_events\images\1 (8).jpg" alt="Cover 7" /></li>
+    <li><img src="C:\Users\AYUSH AHUJA\AppData\Local\Temp\3cdf99d7-b7a4-4de2-afd5-c5436f4807e4_ccet_acm_events[1].zip.7e4\ccet_acm_events\images\1 (10).jpg" alt="Cover 8" /></li>
+    <li><img src="C:\Users\AYUSH AHUJA\AppData\Local\Temp\2739e807-2e16-4bbf-a9f1-c858e876b960_ccet_acm_events[1].zip.960\ccet_acm_events\images\1-01.jpg" alt="Cover 9" /></li>
+    <li><img src="C:\Users\AYUSH AHUJA\AppData\Local\Temp\a85db10d-39ea-475e-9162-fff923722962_ccet_acm_events[1].zip.962\ccet_acm_events\images\1674887964488.jpeg.jpg" alt="Cover 10" /></li>
+  </ul>
+</div>
+<script>
+  const carousel = document.querySelector('.carousel');
+  const container = document.querySelector('.carousel-container');
+  let items = Array.from(carousel.querySelectorAll('li'));
+  const itemCount = items.length;
+  // Calculate width including gap
+  const itemStyle = window.getComputedStyle(items[0]);
+  const gap = parseInt(itemStyle.gap || 32) || 32;
+  const itemWidth = items[0].offsetWidth + gap;
+
+  // Clone first and last N items
+  const cloneCount = 2; // Adjust based on visible area if needed
+  for (let i = 0; i < cloneCount; i++) {
+    carousel.appendChild(items[i].cloneNode(true)); // Clone start to end
+    carousel.insertBefore(items[itemCount - 1 - i].cloneNode(true), carousel.firstChild); // Clone end to start
+  }
+
+  // Update items to include clones
+  const allItems = carousel.querySelectorAll('li');
+
+  // Offset scroll position
+  function setInitialScroll() {
+    container.scrollLeft = itemWidth * cloneCount;
+  }
+  window.addEventListener('load', setInitialScroll);
+  window.addEventListener('resize', setInitialScroll);
+
+  function setActive() {
+    const containerRect = container.getBoundingClientRect();
+    const center = containerRect.left + containerRect.width / 2;
+    let closest = null;
+    let closestDist = Infinity;
+    allItems.forEach(item => {
+      const rect = item.getBoundingClientRect();
+      const itemCenter = rect.left + rect.width / 2;
+      const dist = Math.abs(center - itemCenter);
+      if (dist < closestDist) {
+        closestDist = dist;
+        closest = item;
+      }
+    });
+    allItems.forEach(item => item.classList.remove('active'));
+    if (closest) closest.classList.add('active');
+  }
+
+  container.addEventListener('scroll', function () {
+    // Loop logic
+    if (container.scrollLeft <= 0) {
+      container.scrollLeft = itemWidth * itemCount;
+    } else if (container.scrollLeft >= (itemWidth * (itemCount + cloneCount))) {
+      container.scrollLeft = itemWidth * cloneCount;
+    }
+    setActive();
+  });
+
+  window.addEventListener('resize', setActive);
+  setInitialScroll();
+  setActive();
+
+  // Re-activate on initial render
+  setTimeout(setActive, 100);
+</script>
+</body>
+</html>
